@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\JobOffer;
+use App\Http\Controllers\Web\JobOfferController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $jobOffers = JobOffer::orderBy('created_at', 'desc')->get();
-    return view('jobs.index', compact('jobOffers'));
-});
+Route::get('/', [JobOfferController::class, 'index'])->name('home');
+Route::post('/fetch-offers', [JobOfferController::class, 'fetchOffers']);
+Route::delete('/job-offers/{id}', [JobOfferController::class, 'destroy']);
