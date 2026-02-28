@@ -3,9 +3,11 @@
 namespace App\Jobs;
 
 use App\Models\JobOffer;
+use App\Notifications\IdealJobFound;
 use App\Services\JobAnalysisService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class AnalyzeJobOffer implements ShouldQueue
 {
@@ -34,6 +36,18 @@ class AnalyzeJobOffer implements ShouldQueue
         $jobOffer->ai_analysis = $conclusion;
         $jobOffer->is_processed = true;
         $jobOffer->save();
+        
+        // Enviar notificación si es candidato ideal
+        if ($conclusion === '¡Candidato Ideal!') {
+            Log::info("¡OFERTA IDEAL ENCONTRADA: {$jobOffer->title} en {$jobOffer->company}");
+            
+            // Enviar notificación (por ahora al log)
+            Log::notice("🎯 Candidato Ideal Detectado: {$jobOffer->title} - {$jobOffer->company} ({$jobOffer->location})");
+            
+            // Aquí podríamos enviar a un usuario real:
+            // $user = User::first();
+            // $user->notify(new IdealJobFound($jobOffer->title, $jobOffer->company, $jobOffer->location));
+        }
         
         // Mostrar resultados en consola
         echo "Job Offer {$jobOffer->title} - Conclusión: {$conclusion}\n";

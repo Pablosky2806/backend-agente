@@ -57,7 +57,7 @@
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="text-2xl font-bold text-blue-600">{{ $jobOffers->count() }}</div>
                 <div class="text-gray-600">Total de ofertas</div>
@@ -70,25 +70,52 @@
                 <div class="text-2xl font-bold text-gray-600">{{ $jobOffers->where('is_processed', false)->count() }}</div>
                 <div class="text-gray-600">Pendientes</div>
             </div>
+            <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg shadow p-6">
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    <div>
+                        <div class="text-2xl font-bold text-yellow-700">{{ $jobOffers->where('ai_analysis', '¡Candidato Ideal!')->count() }}</div>
+                        <div class="text-yellow-700 font-medium">Ofertas Ideales</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Job Offers Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse ($jobOffers as $job)
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 
+                    @if($job->ai_analysis === '¡Candidato Ideal!')
+                        border-2 border-yellow-400 shadow-yellow-200 hover:shadow-yellow-300 transform hover:scale-105
+                    @endif">
                     <div class="p-6">
                         <!-- Title and Badge -->
                         <div class="flex justify-between items-start mb-3">
-                            <h3 class="text-xl font-bold text-gray-800 flex-1">{{ $job->title }}</h3>
-                            @if ($job->is_processed)
-                                <span class="ml-2 px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-                                    Analizado
-                                </span>
-                            @else
-                                <span class="ml-2 px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full">
-                                    Pendiente
-                                </span>
-                            @endif
+                            <h3 class="text-xl font-bold text-gray-800 flex-1 
+                                @if($job->ai_analysis === '¡Candidato Ideal!')
+                                    text-yellow-700
+                                @endif">{{ $job->title }}</h3>
+                            <div class="flex items-center gap-2">
+                                @if($job->ai_analysis === '¡Candidato Ideal!')
+                                    <span class="px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-200 rounded-full flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        Ideal
+                                    </span>
+                                @endif
+                                @if ($job->is_processed)
+                                    <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+                                        Analizado
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full">
+                                        Pendiente
+                                    </span>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- AI Analysis Note -->
