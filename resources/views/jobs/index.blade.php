@@ -91,6 +91,18 @@
                             @endif
                         </div>
 
+                        <!-- AI Analysis Note -->
+                        @if($job->ai_analysis)
+                            <div class="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.707-.707M12 3a9 9 0 11-8.464 5.95"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium text-yellow-800">Nota del agente: {{ $job->ai_analysis }}</span>
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Company and Location -->
                         <div class="mb-4">
                             <div class="flex items-center text-gray-600 mb-1">

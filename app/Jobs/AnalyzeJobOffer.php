@@ -27,20 +27,63 @@ class AnalyzeJobOffer implements ShouldQueue
             return;
         }
         
-        // Usar servicio de IA para análisis
-        $analysisService = new JobAnalysisService();
-        $analysis = $analysisService->analyzeJobOffer($jobOffer->title, $jobOffer->description);
+        // Generar conclusión basada en palabras clave
+        $conclusion = $this->generateConclusion($jobOffer->title, $jobOffer->description);
         
-        // Guardar análisis en la base de datos
-        $jobOffer->ai_analysis = $analysis['analysis'];
+        // Guardar conclusión en la base de datos
+        $jobOffer->ai_analysis = $conclusion;
         $jobOffer->is_processed = true;
         $jobOffer->save();
         
         // Mostrar resultados en consola
-        $seniorText = $analysis['is_senior'] ? 'PERFIL SENIOR' : 'Perfil Junior/Mid';
-        $scoreText = "(Score: {$analysis['score']})";
+        echo "Job Offer {$jobOffer->title} - Conclusión: {$conclusion}\n";
+    }
+    
+    private function generateConclusion(string $title, string $description): string
+    {
+        $titleLower = strtolower($title);
+        $descriptionLower = strtolower($description);
         
-        echo "Job Offer {$jobOffer->title} - {$seniorText} {$scoreText}\n";
-        echo "Análisis: {$analysis['analysis']}\n\n";
+        // Análisis de Laravel + Remoto
+        if (strpos($titleLower, 'laravel') !== false && strpos($descriptionLower, 'remoto') !== false) {
+            return '¡Candidato Ideal!';
+        }
+        
+        // Análisis de experiencia requerida
+        if (strpos($descriptionLower, '+5 años') !== false || 
+            strpos($descriptionLower, '5+ años') !== false ||
+            strpos($descriptionLower, 'más de 5 años') !== false ||
+            strpos($descriptionLower, '5+ years') !== false) {
+            return 'Requiere mucha experiencia';
+        }
+        
+        // Análisis de tecnologías específicas
+        if (strpos($descriptionLower, 'aws') !== false || 
+            strpos($descriptionLower, 'kubernetes') !== false ||
+            strpos($descriptionLower, 'docker') !== false) {
+            return 'Tecnologías avanzadas requeridas';
+        }
+        
+        // Análisis de nivel senior
+        if (strpos($titleLower, 'senior') !== false || 
+            strpos($titleLower, 'lead') !== false ||
+            strpos($titleLower, 'architect') !== false) {
+            return 'Posición de nivel senior';
+        }
+        
+        // Análisis de trabajo remoto
+        if (strpos($descriptionLower, 'remoto') !== false || 
+            strpos($descriptionLower, 'remote') !== false) {
+            return 'Trabajo remoto disponible';
+        }
+        
+        // Análisis de frameworks populares
+        if (strpos($titleLower, 'react') !== false || 
+            strpos($titleLower, 'vue') !== false ||
+            strpos($titleLower, 'angular') !== false) {
+            return 'Frontend moderno requerido';
+        }
+        
+        return 'Posición estándar';
     }
 }
