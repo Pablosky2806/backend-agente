@@ -1,0 +1,17 @@
+storage
+vendor
+.env
+.env.backup
+.env.production
+node_modules
+.phpunit.result.cache
+.phpactor.json
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+Thumbs.db
+*.log
+.DS_Store
