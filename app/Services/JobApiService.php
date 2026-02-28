@@ -45,7 +45,7 @@ class JobApiService
                 'title' => 'DevOps Engineer',
                 'company' => 'Cloud Systems',
                 'location' => 'Bilbao, Spain',
-                'description' => 'Ingeniero DevOps con experiencia en AWS, Kubernetes y CI/CD. Certificaciones en nube son valoradas.',
+                'description' => 'Ingeniero DevOps con experiencia en AWS, Kubernetes y CI/CD. Certificaciones en nube son valoradas. Trabajo Remoto disponible.',
                 'url_original' => 'https://example.com/jobs/devops-engineer-5'
             ]
         ];

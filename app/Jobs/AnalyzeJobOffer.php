@@ -26,14 +26,28 @@ class AnalyzeJobOffer implements ShouldQueue
             return;
         }
         
+        $isPriority = false;
+        $keywords = ['AWS', 'Kubernetes'];
+        
+        // Analizar palabras clave en la descripción
+        foreach ($keywords as $keyword) {
+            if (stripos($jobOffer->description, $keyword) !== false) {
+                $isPriority = true;
+                echo "Job Offer {$jobOffer->title} marcada como PRIORITARIA (contiene '{$keyword}')\n";
+                break;
+            }
+        }
+        
         // Analizar si la descripción contiene 'Remoto'
         if (stripos($jobOffer->description, 'Remoto') !== false) {
             $jobOffer->is_processed = true;
             $jobOffer->save();
             
-            echo "Job Offer {$jobOffer->title} marcada como procesada (contiene 'Remoto')\n";
+            $priorityText = $isPriority ? ' PRIORITARIA' : '';
+            echo "Job Offer {$jobOffer->title}{$priorityText} marcada como procesada (contiene 'Remoto')\n";
         } else {
-            echo "Job Offer {$jobOffer->title} analizada (no contiene 'Remoto')\n";
+            $priorityText = $isPriority ? ' PRIORITARIA' : '';
+            echo "Job Offer {$jobOffer->title}{$priorityText} analizada (no contiene 'Remoto')\n";
         }
     }
 }
