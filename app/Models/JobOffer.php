@@ -12,7 +12,8 @@ class JobOffer extends Model
         'location',
         'description',
         'url_original',
-        'is_processed'
+        'is_processed',
+        'ai_analysis'
     ];
 
     protected $casts = [

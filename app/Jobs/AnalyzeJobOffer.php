@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\JobOffer;
+use App\Services\JobAnalysisService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -26,28 +27,20 @@ class AnalyzeJobOffer implements ShouldQueue
             return;
         }
         
-        $isPriority = false;
-        $keywords = ['AWS', 'Kubernetes'];
+        // Usar servicio de IA para análisis
+        $analysisService = new JobAnalysisService();
+        $analysis = $analysisService->analyzeJobOffer($jobOffer->title, $jobOffer->description);
         
-        // Analizar palabras clave en la descripción
-        foreach ($keywords as $keyword) {
-            if (stripos($jobOffer->description, $keyword) !== false) {
-                $isPriority = true;
-                echo "Job Offer {$jobOffer->title} marcada como PRIORITARIA (contiene '{$keyword}')\n";
-                break;
-            }
-        }
+        // Guardar análisis en la base de datos
+        $jobOffer->ai_analysis = $analysis['analysis'];
+        $jobOffer->is_processed = true;
+        $jobOffer->save();
         
-        // Analizar si la descripción contiene 'Remoto'
-        if (stripos($jobOffer->description, 'Remoto') !== false) {
-            $jobOffer->is_processed = true;
-            $jobOffer->save();
-            
-            $priorityText = $isPriority ? ' PRIORITARIA' : '';
-            echo "Job Offer {$jobOffer->title}{$priorityText} marcada como procesada (contiene 'Remoto')\n";
-        } else {
-            $priorityText = $isPriority ? ' PRIORITARIA' : '';
-            echo "Job Offer {$jobOffer->title}{$priorityText} analizada (no contiene 'Remoto')\n";
-        }
+        // Mostrar resultados en consola
+        $seniorText = $analysis['is_senior'] ? 'PERFIL SENIOR' : 'Perfil Junior/Mid';
+        $scoreText = "(Score: {$analysis['score']})";
+        
+        echo "Job Offer {$jobOffer->title} - {$seniorText} {$scoreText}\n";
+        echo "Análisis: {$analysis['analysis']}\n\n";
     }
 }

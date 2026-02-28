@@ -113,6 +113,21 @@
                             <p class="text-gray-700 text-sm line-clamp-3">{{ Str::limit($job->description, 150) }}</p>
                         </div>
 
+                        <!-- AI Analysis -->
+                        @if($job->ai_analysis)
+                            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.707-.707M12 3a9 9 0 11-8.464 5.95"></path>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-semibold text-blue-800 mb-1">Análisis de IA</div>
+                                        <p class="text-xs text-blue-700">{{ Str::limit($job->ai_analysis, 200) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Actions -->
                         <div class="flex justify-between items-center">
                             <a href="{{ $job->url_original }}" target="_blank" 
